@@ -10,9 +10,9 @@ from app.db import redis_client
 
 from app.core import CircuitBreaker, RunMetrics, get_settings
 from app.models import CompanyResearchResult, Evidence, Findings, QueryStrategy
-from app.services import EnhancedStreamingAggregator, Extractor
+from app.services import Extractor
 from app.sources import (
-    BaseSource, GoogleSearchSource, NewsSearchSource, SourceResult
+    BaseSource, GoogleSearchSource, JobsSearchSource, NewsSearchSource, SourceResult
 )
 
 
@@ -43,6 +43,7 @@ class ResearchPipeline:
         # Source Pools for rate limiting
         self.source_pools: Dict[str, asyncio.Semaphore] = {
             "google_search": asyncio.Semaphore(max_parallel_searches),   
+            "jobs_search": asyncio.Semaphore(max_parallel_searches),
             "news_search": asyncio.Semaphore(max_parallel_searches),
         }
         self.default_pool = asyncio.Semaphore(max(max_parallel_searches // 4, 2))
@@ -50,6 +51,7 @@ class ResearchPipeline:
         # Sources
         self.sources: Dict[str, BaseSource] = {
             "google_search": GoogleSearchSource(),
+            "jobs_search": JobsSearchSource(),
             "news_search": NewsSearchSource(),
         }
         

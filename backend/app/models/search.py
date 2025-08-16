@@ -11,6 +11,11 @@ class QueryStrategy:
     query_template: str
 
     def build_query(self, company_domain: str) -> str:
+        # jobs_search doesn't use domain/company placeholders
+        if self.channel == "jobs_search":
+            return self.query_template
+            
+        # Other channels use domain/company substitution
         company_name = company_domain.split(".")[0]
         
         return self.query_template.format(

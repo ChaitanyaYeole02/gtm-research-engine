@@ -6,7 +6,7 @@ AI-powered research engine that analyzes companies using LLM-generated search st
 
 - **LLM-Generated Strategies** - Google Gemini creates intelligent search queries
 - **Parallel Processing** - Async worker pools for concurrent source queries
-- **Multi-Source Intelligence** - Google Search (Tavily) + NewsAPI + deduplication
+- **Multi-Source Intelligence** - Google Search (Tavily) + NewsAPI + Jobs Search (Greenhouse) + deduplication
 - **Real-time Streaming** - Server-Sent Events for live progress updates
 - **Technology Extraction** - AI-powered tech stack detection from evidence
 
@@ -87,14 +87,39 @@ eventSource.addEventListener("domain_analyzed", (event) => {
 
 ## Architecture
 
-```
-LLM Strategy Generation → Parallel Worker Pools → Evidence Collection → AI Tech Extraction
-     ↓                           ↓                        ↓                    ↓
-Google Gemini              Tavily + NewsAPI         Redis Deduplication    Confidence Scoring
+### System Overview
+
+```mermaid
+graph TD
+    A[Research Request] --> B[LLM Query Generation<br/>Google Gemini]
+    B --> C[Multiple Search Strategies]
+    C --> D[Pipeline Execution]
+
+    D --> E[Google Search Pool<br/>max_parallel_searches]
+    D --> F[News Search Pool<br/>max_parallel_searches]
+    D --> G[Jobs Search Pool<br/>max_parallel_searches]
+
+    E --> H[GoogleSearchSource<br/>Tavily API]
+    F --> I[NewsSearchSource<br/>NewsAPI]
+    G --> J[JobsSearchSource<br/>Greenhouse API + TF-IDF]
+
+    H --> K[Evidence Aggregation<br/>Redis Deduplication]
+    I --> K
+    J --> K
+    K --> L[AI Tech Extraction<br/>Confidence Scoring]
+    L --> M[Final Results]
 ```
 
-**Performance:**
+### Data Sources
 
-- 6 concurrent Google searches + 3 News searches
-- ~3-5x faster with async domain processing
-- Redis-based deduplication prevents duplicate evidence
+- **Google Search (Tavily)** - Site-specific searches, Boolean queries, file type filtering
+- **News Search (NewsAPI)** - Press releases, funding news, security incidents, partnerships
+- **Jobs Search (Greenhouse)** - Job postings with TF-IDF semantic matching for tech requirements
+
+### Performance
+
+- **Concurrent Processing**: Each source pool runs `max_parallel_searches` simultaneously
+- **Semantic Job Matching**: TF-IDF vectorization with cosine similarity for intelligent job filtering
+- **Rate Limiting**: Per-source semaphore pools prevent API overwhelming
+- **Deduplication**: Redis-based evidence deduplication across all sources
+- **~3-5x faster** with async domain processing vs sequential execution

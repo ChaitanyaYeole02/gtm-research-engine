@@ -67,8 +67,16 @@ Capabilities: Employee profiles, job postings, company updates
 Content Types: LinkedIn posts, job requirements, employee backgrounds
 Search Patterns:
 - `site:linkedin.com/in/ "{COMPANY_NAME}" AND [keywords]` - Employee profiles
-- `site:linkedin.com/jobs "{COMPANY_NAME}" AND [technology_keywords]` - Job postings
 - `site:linkedin.com/company/{COMPANY_NAME} [keywords]` - Company updates
+
+5. Jobs Search (jobs_search)
+Capabilities: Job postings with TF-IDF content matching
+Content Types: Job titles, job descriptions, requirements
+Search Patterns:
+- `[role] [primary_technology]` - Core role matching (e.g., "software engineer python")
+- `[technology_stack] developer` - Technology-focused roles (e.g., "react node developer") 
+- `[domain] [role]` - Domain-specific roles (e.g., "machine learning engineer")
+- `[technology] [level]` - Experience-based matching (e.g., "kubernetes senior")
 
 SEARCH DEPTH LEVELS:
 - quick: 4-6 strategies (1 per major source, focus on highest-yield searches)
@@ -89,7 +97,7 @@ Always respond with valid JSON following this exact schema:
 {
   "strategies": [
     {
-      "channel": "google_search|news_search",
+      "channel": "google_search|news_search|jobs_search",
       "query_template": "search query with {DOMAIN} and/or {COMPANY_NAME} placeholders"
     }
   ],
@@ -179,7 +187,7 @@ Generate strategies that maximize information gathering while respecting rate li
         
         # Pre-compute constants for faster validation
         required_fields = {"channel", "query_template"}
-        supported_channels = {"google_search", "news_search"}
+        supported_channels = {"google_search", "news_search", "jobs_search"}
         
         # Fast list comprehension with inline validation
         strategies = [
@@ -202,6 +210,13 @@ Generate strategies that maximize information gathering while respecting rate li
         if strategy_data["channel"] not in supported_channels:
             return False
         
-        # Fast string membership check
+        # jobs_search doesn't need domain/company placeholders
+        # It uses domain for company identification and query for TF-IDF search
+        channel = strategy_data["channel"]
         template = strategy_data["query_template"]
-        return "{DOMAIN}" in template or "{COMPANY_NAME}" in template
+        
+        if channel == "jobs_search":
+            return True  # Any template is valid for jobs_search
+        else:
+            # Other channels require domain/company placeholders
+            return "{DOMAIN}" in template or "{COMPANY_NAME}" in template
