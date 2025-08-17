@@ -98,11 +98,25 @@ Always respond with valid JSON following this exact schema:
   "strategies": [
     {
       "channel": "google_search|news_search|jobs_search",
-      "query_template": "search query with {DOMAIN} and/or {COMPANY_NAME} placeholders"
+      "query_template": "search query with {DOMAIN} and/or {COMPANY_NAME} placeholders",
+      "relevance_score": 0.95
     }
   ],
 }
 ```
+
+RELEVANCE SCORING (0.0-1.0):
+- 0.9-1.0: Highest relevance - Direct, specific searches most likely to find strong evidence
+- 0.7-0.9: High relevance - Targeted searches with good probability of relevant results  
+- 0.5-0.7: Medium relevance - Broader searches that may find supporting evidence
+- 0.3-0.5: Lower relevance - Exploratory searches for edge cases or indirect signals
+- 0.0-0.3: Lowest relevance - Broad searches unlikely to yield specific evidence
+
+Score each strategy based on:
+1. Specificity: More specific queries score higher than broad ones
+2. Evidence Quality: Strategies likely to find direct evidence score higher
+3. Source Reliability: Company websites and job postings often score higher than general web searches
+4. Keyword Relevance: Strategies using exact research goal keywords score higher
 
 EXAMPLE STRATEGY DISTRIBUTION:
 
@@ -194,10 +208,14 @@ Generate strategies that maximize information gathering while respecting rate li
             QueryStrategy(
                 channel=strategy_data["channel"],
                 query_template=strategy_data["query_template"],
+                relevance_score=strategy_data.get("relevance_score", 1.0),
             )
             for strategy_data in strategies_list
             if self._is_valid_strategy(strategy_data, required_fields, supported_channels)
         ]
+
+        # Sort strategies by relevance score (highest first) for optimized execution order
+        strategies.sort(key=lambda s: s.relevance_score, reverse=True)
 
         return strategies
 

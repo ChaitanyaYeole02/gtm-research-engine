@@ -9,6 +9,7 @@ class QueryStrategy:
 
     channel: str
     query_template: str
+    relevance_score: float = 1.0
 
     def build_query(self, company_domain: str) -> str:
         # jobs_search doesn't use domain/company placeholders
