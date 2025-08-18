@@ -1,5 +1,7 @@
 import React from "react";
-import { Paper, Stack, Box } from "@mui/material";
+
+import { Paper, Stack } from "@mui/material";
+
 import { SearchForm } from "./SearchForm";
 import { SearchControls } from "./SearchControls";
 import { SettingsMenu } from "./SettingsMenu";
@@ -69,6 +71,7 @@ export const SearchInterface: React.FC<SearchInterfaceProps> = ({
           <SearchForm
             searchQuery={searchQuery}
             onSearchChange={onSearchChange}
+            disabled={isLoading}
           />
 
           <SearchControls

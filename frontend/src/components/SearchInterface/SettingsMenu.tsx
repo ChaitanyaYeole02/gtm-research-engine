@@ -1,18 +1,18 @@
 import React from "react";
-import {
-  Popover,
-  Box,
-  Typography,
-  Stack,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-  Slider,
-  Button,
-  Chip,
-  Divider,
-} from "@mui/material";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
+import FormControl from "@mui/material/FormControl";
+import MenuItem from "@mui/material/MenuItem";
+import Popover from "@mui/material/Popover";
+import Select from "@mui/material/Select";
+import Slider from "@mui/material/Slider";
+import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+
 import { SearchSettings } from "../../types/settings";
 
 interface SettingsMenuProps {

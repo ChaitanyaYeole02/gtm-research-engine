@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { SearchSettings } from "../types/settings";
 
 export const useSettings = () => {

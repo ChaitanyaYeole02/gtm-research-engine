@@ -1,9 +1,12 @@
 import React from "react";
-import { Box, IconButton, Button } from "@mui/material";
-import {
-  Tune as TuneIcon,
-  ArrowUpward as ArrowUpwardIcon,
-} from "@mui/icons-material";
+
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+
+import TuneIcon from "@mui/icons-material/Tune";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 
 interface SearchControlsProps {
   onSettingsClick: (event: React.MouseEvent<HTMLElement>) => void;
@@ -29,11 +32,17 @@ export const SearchControls: React.FC<SearchControlsProps> = ({
     >
       <IconButton
         onClick={onSettingsClick}
+        disabled={isLoading}
         sx={{
-          color: "text.secondary",
+          color: isLoading ? "text.disabled" : "text.secondary",
           "&:hover": {
-            color: "primary.main",
-            backgroundColor: "rgba(255, 122, 0, 0.1)",
+            color: isLoading ? "text.disabled" : "primary.main",
+            backgroundColor: isLoading
+              ? "transparent"
+              : "rgba(255, 122, 0, 0.1)",
+          },
+          "&:disabled": {
+            color: "text.disabled",
           },
         }}
       >
@@ -64,7 +73,17 @@ export const SearchControls: React.FC<SearchControlsProps> = ({
             color: "#FFFFFF",
           },
         }}
-        startIcon={<ArrowUpwardIcon />}
+        startIcon={
+          isLoading ? (
+            <CircularProgress
+              size={20}
+              thickness={4}
+              sx={{ color: "#FFFFFF" }}
+            />
+          ) : (
+            <ArrowUpwardIcon />
+          )
+        }
       >
         {isLoading ? "Researching..." : "Start Research"}
       </Button>

@@ -24,5 +24,5 @@ def get_settings() -> Settings:
         # API Rate Limits - Conservative defaults
         tavily_rpm=500, 
         gemini_rpm=2000,
-        newsapi_rpm=120, 
+        newsapi_rpm=300, 
     )
