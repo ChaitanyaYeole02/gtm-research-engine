@@ -1,92 +1,126 @@
 # GTM Research Engine - Frontend
 
-Beautiful React TypeScript frontend for the GTM Research Engine, inspired by Claude.ai's clean design.
+A modern, responsive React-based frontend for the GTM Research Engine, built with Material-UI v7 and Vite.
 
-## Features
+## 🚀 Features
 
-- **Modern UI/UX**: Clean, minimalist design inspired by Claude.ai
-- **Material-UI**: Beautiful components with custom Claude-inspired theme
-- **TypeScript**: Full type safety and better developer experience
-- **Responsive Design**: Works perfectly on desktop and mobile devices
-- **Orange Accent**: Custom orange color scheme matching Claude.ai branding
+### **Search Interface**
 
-## Tech Stack
+- **Intelligent Search Input**: Large, prominent search field with search icon
+- **Settings Configuration**: Tune button for advanced search parameters
+- **Real-time Validation**: Input validation with user-friendly error messages
+- **Responsive Design**: Mobile-first approach with breakpoint optimization
 
-- React 18
-- TypeScript
-- Material-UI (MUI) v5
-- Emotion (CSS-in-JS)
-- Inter font family
+### **Advanced Settings**
 
-## Getting Started
+- **Parallel Search Control**: Configure `max_parallel_searches` (1-10)
+- **Company Domains**: Add/remove specific company domains for targeted research
+- **Search Depth**: Choose between 'quick', 'standard', or 'comprehensive'
+- **Confidence Threshold**: Set confidence level from 0.0 to 1.0
 
-### Prerequisites
+## 🛠️ Technology Stack
 
-- Node.js 18+
-- npm or yarn
+- **Framework**: React 18 with TypeScript
+- **UI Library**: Material-UI (MUI) v7
+- **Build Tool**: Vite 5.x
+- **Styling**: CSS-in-JS with MUI's `sx` prop
+- **State Management**: React hooks with custom logic
+- **Type Safety**: Full TypeScript implementation
 
-### Installation
+## 📦 Installation
 
 ```bash
+# Navigate to frontend directory
+cd frontend
+
 # Install dependencies
 npm install
 
 # Start development server
-npm start
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
-The app will open at `http://localhost:3000`
+## 🔧 Development
 
-### Available Scripts
+### **Available Scripts**
 
-- `npm start` - Run development server
-- `npm build` - Build for production
-- `npm test` - Run tests
-- `npm run eject` - Eject from Create React App (one-way operation)
+- `npm run dev` - Start development server (localhost:3000)
+- `npm run build` - Build production bundle
+- `npm run preview` - Preview production build locally
+- `npm run start` - Alias for dev server
 
-## Design System
+### **Development Server**
 
-### Colors
+- **Port**: 3000
+- **Hot Reload**: Enabled
+- **TypeScript**: Real-time type checking
+- **ESLint**: Code quality enforcement
 
-- **Primary Orange**: `#FF7A00` (Claude's signature orange)
-- **Background**: Pure white `#FFFFFF` with subtle gradients
-- **Text**: Dark gray `#1A1A1A` for primary text
-- **Secondary Text**: Medium gray `#666666`
+## 🎨 Component Architecture
 
-### Typography
+### **Data Flow**
 
-- **Font Family**: Inter (modern, readable)
-- **Weights**: 300, 400, 500, 600, 700
+1. **User Input** → SearchForm component
+2. **Settings Configuration** → SettingsMenu component
+3. **Form Submission** → useSearch hook
+4. **API Call** → Backend research endpoint
+5. **Results Display** → ResearchResults component
 
-### Components
+## 🔌 API Integration
 
-- Clean input fields with subtle hover states
-- Orange gradient buttons with smooth transitions
-- Glassmorphism cards with backdrop blur
-- Smooth fade-in animations
+### **Endpoint**
 
-## Project Structure
+- **URL**: `http://localhost:8000/research/batch`
+- **Method**: POST
+- **Content-Type**: application/json
 
+### **Request Format**
+
+```typescript
+{
+  research_goal: string;
+  company_domains: string[];
+  search_depth: "quick" | "standard" | "comprehensive";
+  max_parallel_searches: number;
+  confidence_threshold: number;
+}
 ```
-frontend/
-├── public/
-│   └── index.html
-├── src/
-│   ├── components/     # Reusable UI components
-│   ├── types/         # TypeScript type definitions
-│   ├── utils/         # Utility functions
-│   ├── App.tsx        # Main application component
-│   ├── index.tsx      # React entry point
-│   └── theme.ts       # MUI theme configuration
-├── package.json
-└── tsconfig.json
-```
 
-## Future Enhancements
+### **Response Handling**
 
-- Search results display
-- Real-time streaming updates
-- Company detail views
-- Export functionality
-- Dark mode support
-- Advanced filtering options
+- **Success**: Display results in organized, tabbed interface
+- **Error**: Show user-friendly error messages
+- **Loading**: Circular progress and disabled states
+
+## 🎨 Design System
+
+### **Color Palette**
+
+- **Primary**: Orange gradient (#FF7A00 → #E65C00)
+- **Background**: Subtle off-white (hsl(0, 0%, 98%))
+- **Text**: Dark grays with proper contrast
+- **Accents**: Material-UI semantic colors
+
+## 🔮 Future Enhancements
+
+### **Planned Features**
+
+- **Real-time Updates**: WebSocket integration for live research progress
+- **Export Options**: PDF/CSV result export
+- **Search History**: User research query history
+- **Advanced Filtering**: Result filtering and sorting
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](../LICENSE) file for details.
+
+## 🔗 Related Links
+
+- **Backend API**: [Backend Documentation](../backend/README.md)
+- **Project Overview**: [Main README](../README.md)

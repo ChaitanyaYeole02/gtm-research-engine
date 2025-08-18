@@ -1,4 +1,4 @@
-# GTM Research Engine
+# GTM Research Engine - Backend
 
 AI-powered research engine that analyzes companies using LLM-generated search strategies and parallel data collection across multiple sources.
 
